@@ -1,0 +1,34 @@
+权限与用途对照 · 青柠起始页 v1.4.0（Chrome / Edge 相同）
+
+manifest 声明
+  permissions        : activeTab, browsingData, commands, storage
+  content_scripts    : matches = https://beta.limestart.cn/* , https://www.limestart.cn/*
+  web_accessible_resources : wallpapers/*（限定自家域名）
+  chrome_url_overrides     : newtab = newtab-ext.html
+  chrome_settings_overrides: homepage = https://www.limestart.cn/?from=ext
+
+未申请（结构性排除相关能力）
+  history / scripting / webRequest / declarativeNetRequest / tabs / <all_urls> / proxy / bookmarks
+
+"阅读浏览记录"预警核实
+  chrome.history 调用           : 0 处
+  chrome.cookies 调用           : 0 处
+  document.cookie 调用          : 0 处
+  browsingData 权限语义         : 仅"清除"浏览数据，API 只有 remove* 系列，无读取能力
+  browsingData 实际调用         : 见下方，收窄到自家域名
+
+browsingData 唯一调用（scripts/popup-ext.js · "修复缓存"按钮）
+  await chrome.browsingData.remove(
+    { origins: ["https://www.limestart.cn"] },
+    { cache:true, cacheStorage:true, cookies:true, fileSystems:true,
+      indexedDB:true, localStorage:true, serviceWorkers:true })
+  （Firefox 分支：browser.browsingData.remove({hostnames:["www.limestart.cn"]}, {...})）
+
+结论：仅清除青柠自家域名下的缓存/Cookie，不读取、不触碰全局数据。
+
+全部 chrome.* / browser.* API 调用
+  background.js         : tabs.query, tabs.create, commands.onCommand
+  newtab-ext.js         : storage.sync, tabs.getCurrent, tabs.create, tabs.remove
+  customize-limestart.js: runtime.getManifest, runtime.getURL
+  popup-ext.js          : runtime.getManifest, storage.sync, tabs.query, tabs.reload,
+                          browsingData.remove, (browser.browsingData.remove)

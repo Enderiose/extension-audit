@@ -1,0 +1,23 @@
+Chrome 版 (lime.crx) vs Edge 版 (lime-edge.crx) 逐文件对比
+=======================================================
+仅 Chrome 版有 : 无
+仅 Edge 版有   : ['.DS_Store', '.web-extension-id', '_locales/.DS_Store']
+共有文件       : 21
+内容不同的文件 : ['_metadata/verified_contents.json', 'manifest.json']
+
+  (_metadata/verified_contents.json 为商店元数据，内容随 update_url/签名变化)
+--- chrome/manifest.json
++++ edge/manifest.json
+@@ -53,7 +53,7 @@
+     "commands",
+     "storage"
+   ],
+-  "update_url": "https://clients2.google.com/service/update2/crx",
++  "update_url": "https://edge.microsoft.com/extensionwebstorebase/v1/crx",
+   "version": "1.4.0",
+   "web_accessible_resources": [
+     {
+
+结论：全部可执行代码（scripts/*.js、*.html、*.css、图片、壁纸）逐字节相同；
+      Edge 版仅比 Chrome 版多 3 个打包残留文件（.DS_Store、_locales/.DS_Store、.web-extension-id），
+      manifest 仅 update_url 不同。功能与行为与 Chrome 版一致。

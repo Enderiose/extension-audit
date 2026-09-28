@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- HTML written by limestart.cn -->
+<!-- Copyright Mao Ruoxin & Shangzhen Yang. All Rights Reserved. -->
+<html lang="zh-CN">
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="styles/popup-ext.css" />
+</head>
+
+<body>
+	<div class="main-page" id="main-page">
+		<header>
+			<h1 data-i18n="lime_start_page_extension"></h1>
+			<a class="logo-wrapper" href="https://www.limestart.cn/" title="青柠起始页" target="_blank">
+				<span class="logo"></span>
+			</a>
+		</header>
+		<div class="menu-item welcome-container">
+			<div class="welcome-text" data-i18n="welcome_text"></div>
+			<div class="contact-container">
+				<div>
+					<div class="description" data-i18n="qq_group"></div>
+					<a href="https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=ysuGDCHA6SVUK-Glc15Di8KJ4yDgWVKK&authKey=q2mQe5J8jFHwXt0pMbrEQUx9yVdTyp7k2kE%2FN7pqYp0zv6Irzu6z7P4ioHLeadEE&noverify=0&group_code=941653619" target="_blank">941653619</a>
+				</div>
+				<span class="divider"></span>
+				<div>
+					<div class="description" data-i18n="weibo"></div>
+					<a href="https://weibo.com/limestart" target="_blank">@青柠起始页</a>
+				</div>
+			</div>
+		</div>
+		<div class="menu-group-title" data-i18n="quick_action"></div>
+		<button class="menu-item button" id="add-shortcut-button" type="button">
+			<span data-i18n="add_current_website_to_shortcuts"></span>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14">
+				<path d="M11 11.0001L11 2.0005L13 2.00049L13 11.0001L22.0001 10.9999L22.0002 12.9999L13 13.0001L13.0001 22L11.0001 22L11.0001 13.0001L2.00004 13.0003L2 11.0003L11 11.0001Z"></path>
+			</svg>
+		</button>
+		<div class="menu-group-title" data-i18n="extension_settings"></div>
+		<div class="menu-item option">
+			<div>
+				<div data-i18n="auto_focus_on_search_bar"></div>
+				<div class="description menu-item-description" data-i18n="auto_focus_on_search_bar_description">
+				</div>
+			</div>
+			<label class="switch">
+				<input type="checkbox" id="checkbox-redirect-new-tab" />
+				<span class="slider"></span>
+			</label>
+		</div>
+		<button class="menu-item button" id="fix-cache-button" type="button">
+			<div>
+				<div data-i18n="fix_cache"></div>
+				<div class="description menu-item-description" data-i18n="fix_cache_description"></div>
+			</div>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14">
+				<path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 0 1 6.775-5.025.75.75 0 0 1 .313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 0 1 1.248.313 5.25 5.25 0 0 1-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 1 1 2.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0 1 12 6.75ZM4.117 19.125a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z" clip-rule="evenodd" />
+				<path d="m10.076 8.64-2.201-2.2V4.874a.75.75 0 0 0-.364-.643l-3.75-2.25a.75.75 0 0 0-.916.113l-.75.75a.75.75 0 0 0-.113.916l2.25 3.75a.75.75 0 0 0 .643.364h1.564l2.062 2.062 1.575-1.297Z" />
+				<path fill-rule="evenodd" d="m12.556 17.329 4.183 4.182a3.375 3.375 0 0 0 4.773-4.773l-3.306-3.305a6.803 6.803 0 0 1-1.53.043c-.394-.034-.682-.006-.867.042a.589.589 0 0 0-.167.063l-3.086 3.748Zm3.414-1.36a.75.75 0 0 1 1.06 0l1.875 1.876a.75.75 0 1 1-1.06 1.06L15.97 17.03a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+			</svg>
+
+		</button>
+		<button class="menu-item button" id="dunight-button" type="button">
+			<div>
+				<div data-i18n="beautify_baidu_search_results_page"></div>
+				<div class="description menu-item-description" data-i18n="beautify_baidu_search_results_page_description"></div>
+			</div>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+				<path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+			</svg>
+		</button>
+		<button class="menu-item button" id="more-settings-button" type="button">
+			<div>
+				<div data-i18n="more_settings"></div>
+				<div class="description menu-item-description" data-i18n="more_settings_description"></div>
+			</div>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+				<path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+			</svg>
+		</button>
+		<div class="menu-group-title" data-i18n="extension_information"></div>
+		<div class="button-group">
+			<button class="menu-item button half-width" id="change-log-button" type="button">
+				<span data-i18n="change_log"></span>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14">
+					<path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" />
+					<path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+				</svg>
+			</button>
+			<button class="menu-item button half-width" id="intro-page-button" type="button">
+				<span data-i18n="official_website"></span>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14">
+					<path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
+					<path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
+				</svg>
+			</button>
+			<button class="menu-item button" id="rate-button" type="button">
+				<span data-i18n="rate_us"></span>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14">
+					<path d="M16.5 3C19.5376 3 22 5.5 22 9C22 16 14.5 20 12 21.5C9.5 20 2 16 2 9C2 5.5 4.5 3 7.5 3C9.35997 3 11 4 12 5C13 4 14.64 3 16.5 3Z"></path>
+				</svg>
+			</button>
+		</div>
+		<footer>
+			<div id="version-text"></div>
+			<div>
+				&copy; <span id="copyright-year"></span>
+				<a data-i18n="retinbox" href="https://www.retiehe.com/" target="_blank"></a>
+			</div>
+		</footer>
+	</div>
+	<script src="scripts/popup-ext.js"></script>
+</body>
+
+</html>

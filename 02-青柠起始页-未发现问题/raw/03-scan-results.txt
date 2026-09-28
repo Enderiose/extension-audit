@@ -1,0 +1,27 @@
+特征扫描结果（两版代码逐字节相同，扫一份；全部命中项与上下文）
+扫描文件数: 12
+
+电商域: 0
+仿冒域: 0
+推广码参数: 0
+点击/跳转路径: 0
+指纹采集: 0
+动态执行: 0
+远程脚本注入: 0
+历史记录读取: 0
+cookie 读取: 0
+
+远程域名（按出现频次）
+    11x https://www.limestart.cn
+     7x http://www.w3.org
+     3x https://beta.limestart.cn
+     3x https://at.alicdn.com
+     2x https://intro.limestart.cn
+     1x https://edge.microsoft.com
+     1x https://qm.qq.com
+     1x https://weibo.com
+     1x https://www.retiehe.com
+     1x https://dunight.cn
+     1x https://microsoftedge.microsoft.com
+     1x https://addons.mozilla.org
+     1x https://chrome.google.com

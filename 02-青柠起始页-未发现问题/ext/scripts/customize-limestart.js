@@ -1,0 +1,1 @@
+const extVal=document.createElement("div");extVal.id="ext";extVal.style.display="none";extVal.dataset.ver=chrome.runtime.getManifest().version;extVal.dataset.url=chrome.runtime.getURL("wallpapers/Default1.jpg");document.body.appendChild(extVal);

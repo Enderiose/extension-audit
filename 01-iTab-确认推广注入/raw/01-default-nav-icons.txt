@@ -1,0 +1,8 @@
+文件: chunks/defaultNavConfig-B7uRQ5vb.js
+
+默认导航图标指向:
+  淘宝 -> https://taobao.coml.cc/
+  京东商城 -> https://jd.coml.cc/
+  百度 -> https://www.baidu.com/?tn=15007414_23_dg
+  天猫精选 -> https://tmall.coml.cc/
+  阿里巴巴 -> https://1688.coml.cc/

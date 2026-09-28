@@ -1,0 +1,17 @@
+青柠起始页 · 原始安装包哈希（Chrome + Edge）
+
+原始安装包
+  lime.crx       (Chrome 官方商店, 青柠起始页 v1.4.0, 26665489 bytes)
+      MD5    2936aeef53a1c9bb079bfda3cf7e93d3
+      SHA256 fa9856e0a4a2e6ed4aba14539b699b2eaaba646145eaba0663aaa70239b3dee9
+
+  lime-edge.crx  (Edge 官方商店, 青柠起始页 v1.4.0, 26659073 bytes)
+      MD5    7990e470de73852d188b09f84ba826c7
+      SHA256 fff0bb921da6ecdfca2b54c3ea65b740fc73d3a69eb6e1c964073e68dcef3998
+
+扩展信息
+  Chrome ID : aajmeahnoefldipnjgodkobfdcpmapno
+  Edge   ID : pcpnigdkpcgemocnjhebmajldpjlbeom
+  版本      : 1.4.0
+  取证时间  : 2026-09-26
+  取证方式  : 官方商店接口下载原始包 → 静态分析 → 对外可重复的网络请求

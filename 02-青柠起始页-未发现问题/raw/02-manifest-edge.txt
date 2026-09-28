@@ -1,0 +1,71 @@
+来源: lime-edge.crx
+
+{
+  "manifest_version": 3,
+  "name": "__MSG_lime_start_page__",
+  "description": "__MSG_lime_start_page_description__",
+  "version": "1.4.0",
+  "icons": {
+    "512": "images/lime-icon-512x.png",
+    "256": "images/lime-icon-256x.png",
+    "128": "images/lime-icon-128x.png",
+    "64": "images/lime-icon-64x.png"
+  },
+  "default_locale": "zh_CN",
+  "minimum_chrome_version": "88",
+  "action": {
+    "default_icon": {
+      "512": "images/lime-icon-512x.png",
+      "256": "images/lime-icon-256x.png",
+      "128": "images/lime-icon-128x.png",
+      "64": "images/lime-icon-64x.png"
+    },
+    "default_popup": "popup-ext.html"
+  },
+  "chrome_url_overrides": {
+    "newtab": "newtab-ext.html"
+  },
+  "chrome_settings_overrides": {
+    "homepage": "https://www.limestart.cn/?from=ext"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://beta.limestart.cn/*",
+        "https://www.limestart.cn/*"
+      ],
+      "js": [
+        "scripts/customize-limestart.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "wallpapers/*"
+      ],
+      "matches": [
+        "https://beta.limestart.cn/*",
+        "https://www.limestart.cn/*"
+      ]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "browsingData",
+    "commands",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "commands": {
+    "add-shortcut": {
+      "description": "__MSG_add_current_website_to_shortcuts__"
+    }
+  },
+  "homepage_url": "https://intro.limestart.cn/",
+  "update_url": "https://edge.microsoft.com/extensionwebstorebase/v1/crx"
+}

@@ -1,0 +1,31 @@
+Edge 商店包 iTab v2.2.25（本机实际安装的版本）证据
+
+文件: chunks/defaultNavConfig-B7uRQ5vb.js
+    {url:"https://taobao.coml.cc/", type:"icon", name:"淘宝", ...}
+    {url:"https://jd.coml.cc/",     type:"icon", name:"京东商城", ...}
+    {url:"https://tmall.coml.cc/",  type:"icon", name:"天猫精选", ...}
+    {url:"https://1688.coml.cc/",   type:"icon", name:"阿里巴巴", ...}
+    {url:"https://www.baidu.com/?tn=15007414_23_dg", type:"icon", name:"百度", ...}
+
+文件: chunks/statistics-zvMbGPTs.js（服务器下发推广码 + 改写搜索引擎链接）
+    "baidu" === e.key ? e.href = `https://www.baidu.com/s?wd=%s&tn=${o}&ie=utf-8` : ...
+    t.set("app-baiduTn", o)
+
+文件: chunks/store-ve3N8KMS.js
+    {key:"baidu", title:"百度", href:"https://www.baidu.com/s?&tn=15007414_23_dg&ie=utf-8&wd="}
+    useSearch:"baidu"
+
+文件: chunks/public-api-tJRK9Yyi.js
+    baidu.com/s?&tn=52176495_dg&ch=2&wd=
+
+包内所有 tn= 推广码
+    chunks/App-lmVczxdM.js             : tn=15007414_23_dg
+    chunks/defaultNavConfig-B7uRQ5vb.js: tn=15007414_23_dg
+    chunks/main-Wfs5oDmC.js            : tn=15007414_23_dg
+    chunks/public-api-tJRK9Yyi.js      : tn=52176495_dg
+    chunks/store-ve3N8KMS.js           : tn=15007414_23_dg
+    content-scripts/content.js         : tn=15007414_23_dg
+
+本机实测（该 Edge 版本运行期间）
+    扩展存储 app-baiduTn = "75144485_6_dg&ch=4"   ← 服务端按用户下发
+    浏览器历史反复出现 https://www.baidu.com/?tn=75144485_6_dg&ch=4

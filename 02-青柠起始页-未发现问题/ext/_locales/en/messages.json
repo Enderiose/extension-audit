@@ -1,0 +1,83 @@
+{
+	"add_current_website_to_shortcuts": {
+		"message": "Add Current Website to Shortcuts"
+	},
+	"adding_this_page_to_shortcuts_is_not_supported": {
+		"message": "Adding this type of page to Shortcuts is not supported."
+	},
+	"auto_focus_on_search_bar": {
+		"message": "Automatically Focus on the Search Bar in the New Tab"
+	},
+	"auto_focus_on_search_bar_description": {
+		"message": "The address bar of the new tab will display the \"limestart.cn\" URL when this feature is enabled."
+	},
+	"beautify_baidu_search_results_page": {
+		"message": "Beautify the Baidu Search Results Page"
+	},
+	"beautify_baidu_search_results_page_description": {
+		"message": "This feature has been migrated to our \"DuNight\" extension."
+	},
+	"cache_has_been_fixed": {
+		"message": "The cache has been fixed."
+	},
+	"change_log": {
+		"message": "Change Log"
+	},
+	"close": {
+		"message": "Close"
+	},
+	"extension_information": {
+		"message": "Extension Information"
+	},
+	"extension_settings": {
+		"message": "Extension Settings"
+	},
+	"fix_cache": {
+		"message": "Fix Cache"
+	},
+	"fix_cache_confirm": {
+		"message": "Fix cache?\n\nThis action will clear the local cache of Lime Start Page. If the page loads abnormally, this action usually resolves the issue.\n\nYour personal data (such as custom website shortcuts, notes, and preferences) will not be affected in any way."
+	},
+	"fix_cache_description": {
+		"message": "Clear the local cache. If the page loads abnormally, this action usually resolves the issue. Your personal data will not be affected in any way."
+	},
+	"lime_start_page": {
+		"message": "Lime Start Page"
+	},
+	"lime_start_page_description": {
+		"message": "Lime Start Page offers you a beautifully designed new tab with efficiency-increasing functions. This is the official extension of Lime Start Page."
+	},
+	"lime_start_page_extension": {
+		"message": "Lime Start Page Extension"
+	},
+	"more_settings": {
+		"message": "More Settings"
+	},
+	"more_settings_description": {
+		"message": "Go to the \"General Settings\" page on Lime Start Page to modify more settings."
+	},
+	"official_website": {
+		"message": "Official Website"
+	},
+	"qq_group": {
+		"message": "QQ Group"
+	},
+	"quick_action": {
+		"message": "Quick Action"
+	},
+	"rate_us": {
+		"message": "Rate Us"
+	},
+	"retinbox": {
+		"message": "Retinbox"
+	},
+	"version": {
+		"message": "Version"
+	},
+	"weibo": {
+		"message": "Weibo"
+	},
+	"welcome_text": {
+		"message": "Thank you for using Lime Start Page!\nProvide feedback:"
+	}
+}

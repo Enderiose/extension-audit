@@ -1,0 +1,8 @@
+247d71066852e38d74a64d9bee31033e *itab-chrome.crx
+6b03ae67f69114740adc0ec375dd12f61d122ed1b78b7d788a35ca62955f9088 *itab-chrome.crx
+
+扩展信息
+  Chrome ID : mhloojimgilafopcmlcikiidgbbnelip
+  Edge   ID : inedkoakiaeepjoblbiiipedngonadhn
+  商店包版本 : 2.3.13
+  取证时间   : 2026-09-26

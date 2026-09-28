@@ -1,0 +1,83 @@
+{
+	"add_current_website_to_shortcuts": {
+		"message": "添加当前网站到捷径"
+	},
+	"adding_this_page_to_shortcuts_is_not_supported": {
+		"message": "不支持添加此类型的页面到捷径。"
+	},
+	"auto_focus_on_search_bar": {
+		"message": "新建标签页自动聚焦到搜索栏"
+	},
+	"auto_focus_on_search_bar_description": {
+		"message": "开启后，新标签页的地址栏会显示「limestart.cn」网址。"
+	},
+	"beautify_baidu_search_results_page": {
+		"message": "美化百度搜索结果页"
+	},
+	"beautify_baidu_search_results_page_description": {
+		"message": "此功能已迁移至我们推出的「度夜」扩展。"
+	},
+	"cache_has_been_fixed": {
+		"message": "缓存已修复。"
+	},
+	"change_log": {
+		"message": "更新日志"
+	},
+	"close": {
+		"message": "关闭"
+	},
+	"extension_information": {
+		"message": "扩展信息"
+	},
+	"extension_settings": {
+		"message": "扩展设置"
+	},
+	"fix_cache": {
+		"message": "修复缓存"
+	},
+	"fix_cache_confirm": {
+		"message": "修复缓存吗？\n\n此操作将清除青柠起始页的本地缓存。如果页面加载异常，此操作通常可以解决问题。\n\n您的个人数据（自定义网站捷径、便笺和偏好设置等）不会受到任何影响。"
+	},
+	"fix_cache_description": {
+		"message": "清空本地缓存。如果页面加载异常，此操作通常可以解决问题。您的个人数据不会受到任何影响。"
+	},
+	"lime_start_page": {
+		"message": "青柠起始页"
+	},
+	"lime_start_page_description": {
+		"message": "一个简洁、美观、实用的浏览器起始页。此为青柠起始页官方扩展。"
+	},
+	"lime_start_page_extension": {
+		"message": "青柠起始页扩展"
+	},
+	"more_settings": {
+		"message": "更多设置"
+	},
+	"more_settings_description": {
+		"message": "前往青柠起始页的「常规设置」页面以修改更多设置。"
+	},
+	"official_website": {
+		"message": "官网"
+	},
+	"qq_group": {
+		"message": "QQ 群"
+	},
+	"quick_action": {
+		"message": "快捷操作"
+	},
+	"rate_us": {
+		"message": "求五星好评 ☆´∀｀☆"
+	},
+	"retinbox": {
+		"message": "热铁盒软件"
+	},
+	"version": {
+		"message": "版本"
+	},
+	"weibo": {
+		"message": "微博"
+	},
+	"welcome_text": {
+		"message": "欢迎使用青柠起始页扩展 (〃'▽'〃)\n提供反馈和建议："
+	}
+}
