@@ -1,0 +1,31 @@
+# SPEC 1.1 扫描（扩展包内 .js/.html/.json/.css 全文）
+电商域: 0
+仿冒域: 0
+推广码参数: 14  ['ref=', 'tn=']
+点击/跳转路径: 0
+指纹采集: 158  ['deviceId']
+动态执行: 3  ['atob(']
+远程脚本注入: 1  ['insertAdjacentHTML']
+href 改写: 5  ['.href=']
+历史记录读取: 0
+cookie 读取: 0
+--- 远程域名（按出现次数） ---
+    17x http://www.w3.org
+    14x https://kongjing.inc.re
+     2x https://www.bing.com
+     2x https://github.com
+     2x https://www.bilibili.com
+     2x https://www.zhihu.com
+     2x https://www.youtube.com
+     2x https://mail.google.com
+     2x https://sspai.com
+     2x https://kongjing-nonexistent.invalid
+     2x https://sync.example.com
+     1x https://reactjs.org
+     1x https://www.google.com
+     1x https://www.baidu.com
+     1x https://duckduckgo.com
+     1x https://chromewebstore.google.com
+     1x https://chrome.google.com
+     1x https://microsoftedge.microsoft.com
+     1x https://clients2.google.com

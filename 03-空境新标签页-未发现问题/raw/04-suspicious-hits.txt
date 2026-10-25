@@ -1,0 +1,107 @@
+可疑命中项与上下文复核 · 空境 · 新标签页 v2.1.1
+
+说明：本文件逐条复核 S2 扫描的全部命中，并给出"是否构成风险"的判定。
+复核原则见 ../../docs/SPEC.md 第 1.3/1.4 节与第 3 节（常见误报）。
+全部上下文可用 05-verify-cmds.txt 中的命令重新提取。
+
+────────────────────────────────────────────────────────────
+[A] 电商域 0 处
+    命中：无
+    结论：包内不存在 jd.com / taobao.com / tmall.com / 1688.com / pinduoduo / suning / vip.com
+          任何形式的电商链接。
+
+[B] 仿冒域 0 处
+    命中：无
+    结论：无 *.coml.cc 等"把官方域名当子域前缀"的形态。
+
+[C] 推广码参数 14 处 → 全部误报
+    实际内容：13 处 `ref=` 是 React 内部 ref 赋值 / 同步 ack 引用比较；
+              1 处 `tn=` 是局部变量声明 `const tn=()=>typeof chrome<"u"...`
+    证据（示例）：
+      background.js          : e.t==="ack"&&e.ref===t
+      assets/v2-*.js         : const tn=()=>typeof chrome<"u"&&!!chrome.runtime?.id;
+      assets/v2-*.js         : ...F.ref= ... / e.ref= ...（React reconciler，多处）
+    结论：**0 个推广码**。不存在 tn=数值、pid=、unionid=、cps= 等渠道参数。
+
+[D] 点击/跳转路径 0 处
+    命中：无（无 /clk、/click、/track、/redirect、/jump、/goto、/union、/cps、/tg?）
+    结论：无点击跟踪链路。
+
+[E] 指纹类 158 处 `deviceId` → 非浏览器指纹
+    用途：端到端加密同步的**设备标识**（配对与成员列表用）
+    生成方式（background.js）：
+      deviceId: E(await K(b(pub))).slice(0,16)   // 由设备公钥派生的短 ID
+    采集项核对：
+      canvas.toDataURL : 0 处
+      WebGL            : 0 处
+      navigator.language: 0 处
+      fingerprint      : 4 处，均为 `stateFingerprint`（同步状态哈希，本地比对用，不上报）
+      navigator.userAgent : 5 处，仅用于生成"Windows / MacBook / iPhone / Android / Linux"
+                            平台标签，展示在设备列表
+    结论：**无浏览器指纹采集**。
+
+[F] 动态执行 3 处 `atob(` → 内部 base64url 解码
+      background.js / pow.worker.js / assets/index-*.js：
+        return Uint8Array.from(atob(o.replace(/-/g,"+").replace(/_/g,"/")), ...)
+    用途：解码密文信封的 iv/ct、PoW 挑战。输入来自本扩展自身数据。
+    eval(            : 0 处
+    new Function(    : 0 处
+    createElement('script') : 0 处
+    结论：无动态代码执行。
+
+[G] 远程脚本注入 1 处 `insertAdjacentHTML` → 内联 SVG（固定字符串）
+    位置：bar.js（空境栏）
+      a.replaceChildren(H), a.insertAdjacentHTML("beforeend",
+        '<svg width="12" height="12" ...><path d="m6 9 6 6 6-6"/></svg>')
+    结论：写死的内联图标，非远程内容，不构成注入。
+
+[H] href 赋值 5 处 → 无静默改写
+    1) bar.js：location.href = e.url
+       用户点击自己收藏的书签 → 直接跳转，无中转、无参数追加
+    2) bar.js：t.ctrlKey||t.metaKey ? sendMessage("kj:open") : location.href=e.url
+       同上（Ctrl/Cmd 点击走后台新标签）
+    3) assets/index-*.js：s.href=r, s.download=n, s.click()
+       导出备份：把本地数据生成 Blob 后下载
+    4) assets/v2-*.js：R.href===g / link[href="${g}"]（Vite 预加载判断，比较而非赋值）
+    5) assets/v2-*.js：C.href=g（模块预加载 link，g 为包内相对路径）
+    结论：**无对已有链接/搜索引擎的 href 赋值改写**（无 iTab 式 `e.href=s[e.key]||e.href`）。
+
+[I] 历史记录读取 0 处；Cookie 读取 0 处
+    chrome.history / browsingHistory / history.search : 0
+    chrome.cookies / document.cookie                  : 0
+    未申请 history / cookies 权限。
+
+[J] 其他易误报字串（逐一核对，均为误报）
+    "utm" 9 处      → 命中于 budgetMs / LayoutMeasure 等词内部
+    "invite" 14 处  → 同步配对邀请（E2E 密钥交换），非渠道推广
+    "promo" 7 处    → framer-motion 内部 promote() 方法
+    "share" 21 处   → sharedNodes 等动画库内部字段
+    "推荐" 1 处     → 导入对话框文案"合并到当前数据（推荐）"
+    "搜索历史"      → 本地 localStorage 的搜索词自动补全，可关闭、可清空，不上传
+    "清除浏览数据"  → 仅原生外壳桥接 window.KongjingNative（浏览器内为空操作），
+                      manifest 无 browsingData 权限，代码无 chrome.browsingData 调用
+
+[K] 与服务端交互的完整路径复核
+    - 安装/启动：同步客户端未配对时状态 offline，不发同步请求；
+                  但图标补全会按下面的路径请求中继（与配对状态无关）
+    - 图标：优先 chrome-extension://_favicon 本地缓存；缺失时
+            GET <relayUrl>/v1/icon?host=<书签域名>（只发 hostname，不含路径/标题，
+            无认证头，credentials:"omit"），由中继返回图标字节
+            → 域名查询不受端到端加密保护；隐私政策第 2 节已明确披露此点
+    - 同步：仅用户完成配对后，向 kongjing.inc.re 收发 **AES-GCM 密文信封**
+            （见 08-code-excerpts.txt），服务端无明文书签/设置
+    - 不存在"拉取远程配置并改写链接/搜索引擎/导航"的代码路径
+
+[L] 包内遗留文案与实际行为不一致（仅为文案问题）
+    assets/index-*.js 仍保留旧图标权限说明：
+      "空境会直接访问你收藏的网站首页，只为读取它的图标。"
+    实际实现（background.js）没有直连网站取图标的路径：
+      本地 _favicon 缓存 → 失败则请求中继 /v1/icon?host=…
+    该文案出现的 dialog 分支（kind 非 bar）在当前版本无调用点；
+    官方隐私政策（https://kongjing.inc.re/privacy 第 2 节）表述准确：
+      "缺失时将书签网站的域名（例如 github.com，不含页面路径）发给所选图标服务"
+    结论：不构成隐蔽采集；仅建议开发者清理过时文案。
+
+────────────────────────────────────────────────────────────
+总判定：S2 全部命中均可在上下文中解释为正常实现或第三方库内部结构，
+        无一条符合 SPEC 1.2（致命）或 1.3（高危）特征。

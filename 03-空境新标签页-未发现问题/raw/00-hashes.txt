@@ -1,0 +1,19 @@
+空境 · 新标签页 · 原始安装包哈希
+
+原始安装包
+  kongjing-chrome.crx  (Chrome 官方商店, 空境 · 新标签页 v2.1.1, 278724 bytes)
+      MD5    4990456f8fadf816ab9b6a9cd336b3cc
+      SHA256 7fd6d818281c1d7db99c6dd0f63734035bd592e61900e7611ca9058fe0b9f008
+      file   Google Chrome extension, version 3
+
+扩展信息
+  Chrome ID : hiikbcjfgbpnbnkgddndechehhhmgfbg
+  版本      : 2.1.1
+  取证时间  : 2026-10-26
+  Edge 版本 : 本次未取得（未在 Edge 商店检索到可确认的同名条目；本报告结论仅针对上述 Chrome 包）
+
+包完整性（CRX3 / 商店签名）
+  _metadata/verified_contents.json 中 item_id = hiikbcjfgbpnbnkgddndechehhhmgfbg
+  item_version = 2.1.1
+  按 Chromium treehash 规则逐一复算 23 个文件 → 23/23 与签名清单一致（0 处不符）
+  复算方法见 05-verify-cmds.txt 第 4 步

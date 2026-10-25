@@ -1,0 +1,48 @@
+远程域名清单 · 空境 · 新标签页 v2.1.1
+
+统计口径：扩展包内全部 .js/.html/.json/.css 文本中出现的 http(s) 绝对地址
+（模板/占位/示例地址一并列出并标注）
+
+出现次数  域名/地址                        性质
+    17   http://www.w3.org/...            SVG/XML 命名空间（非网络请求，误报项）
+    14   https://kongjing.inc.re          同步中继（host_permissions 唯一授权域）
+     2   https://www.bilibili.com         默认书签（用户可见、可删）
+     2   https://github.com               默认书签
+     2   https://mail.google.com          默认书签（Gmail）
+     2   https://sspai.com                默认书签
+     2   https://www.youtube.com          默认书签
+     2   https://www.zhihu.com            默认书签
+     2   https://www.bing.com             ① 内置可选搜索引擎 ② 非扩展预览模式的兜底
+     2   https://sync.example.com         设置页输入框 placeholder（示例文本）
+     2   https://kongjing-nonexistent.invalid  测试用非法域名（中继地址校验用例）
+     1   https://www.google.com           内置可选搜索引擎
+     1   https://www.baidu.com            内置可选搜索引擎
+     1   https://duckduckgo.com           内置可选搜索引擎
+     1   https://reactjs.org              第三方库许可证注释
+     1   https://chromewebstore.google.com 商店互推（在自己的商店页/设置页打开）
+     1   https://chrome.google.com        商店互推
+     1   https://microsoftedge.microsoft.com 商店互推
+     1   https://clients2.google.com      扩展更新地址（update_url）
+
+内置搜索引擎预设（assets/v2-*.js，均无推广参数）
+  {"id":"default","name":"默认搜索","url":""}                → chrome.search.query（系统默认引擎）
+  {"id":"google","name":"Google","url":"https://www.google.com/search?q=%s"}
+  {"id":"bing","name":"必应","url":"https://www.bing.com/search?q=%s"}
+  {"id":"baidu","name":"百度","url":"https://www.baidu.com/s?wd=%s"}
+  {"id":"duckduckgo","name":"DuckDuckGo","url":"https://duckduckgo.com/?q=%s"}
+  自定义引擎：用户在设置里自行添加（模板需含 %s），默认无预置条目
+
+同步中继端点（background.js，仅在用户完成配对后使用）
+  /v1/health  /v1/pair  /v1/pair/<room>/ws
+  /v1/groups/<room>/{snapshot, journal, forward, slots, slots/<key>, blobs/<id>, ws}
+  /v1/icon?host=<hostname>     图标代取（明文域名，无认证头；隐私政策已披露）
+  /v2/...（EdgeOne 自部署后端分支）
+  （/h/、/ev/ 是 journal 内对象键，不是独立路径）
+  说明：中继只收发密文信封（见 08-code-excerpts.txt 的 E2E 片段），
+        包内不存在“从服务端拉取配置并改写链接/搜索引擎”的代码路径。
+
+未出现的域名类型
+  电商域（jd.com / taobao.com / tmall.com / 1688.com / pinduoduo / suning）: 0
+  仿冒域（*.coml.cc / *.om.cc 等）: 0
+  点击跟踪/返利路径（/clk /click /track /union /cps）: 0
+  统计/广告 SDK 域（google-analytics / googletagmanager / sentry / umami 等）: 0

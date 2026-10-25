@@ -1,0 +1,134 @@
+一分钟自证 · 空境 · 新标签页 v2.1.1
+
+以下命令逐条可执行（Windows Git Bash / Linux 均可），输出应与报告一致。
+工作目录：本案例目录 03-空境新标签页-未发现问题/
+
+────────────────────────────────────────────────────────────
+1) 下载官方原始包
+────────────────────────────────────────────────────────────
+curl -L -o kongjing-chrome.crx \
+  "https://clients2.google.com/service/update2/crx?response=redirect&prodversion=120.0&acceptformat=crx2,crx3&x=id%3Dhiikbcjfgbpnbnkgddndechehhhmgfbg%26uc"
+
+# 期望：Kongjing v2.1.1, 278724 bytes
+md5sum    kongjing-chrome.crx
+# 4990456f8fadf816ab9b6a9cd336b3cc
+sha256sum kongjing-chrome.crx
+# 7fd6d818281c1d7db99c6dd0f63734035bd592e61900e7611ca9058fe0b9f008
+file kongjing-chrome.crx
+# Google Chrome extension, version 3
+
+────────────────────────────────────────────────────────────
+2) 解包（CRX3 = 文件头 + ZIP）
+────────────────────────────────────────────────────────────
+python -c "import zipfile,io;raw=open('kongjing-chrome.crx','rb').read();i=raw.find(b'PK\x03\x04');zipfile.ZipFile(io.BytesIO(raw[i:])).extractall('ext')"
+
+────────────────────────────────────────────────────────────
+3) 权限与关键字段
+────────────────────────────────────────────────────────────
+python -c "import json;m=json.load(open('ext/manifest.json',encoding='utf-8'));print(json.dumps({k:m[k] for k in ['permissions','host_permissions','optional_permissions','optional_host_permissions','chrome_url_overrides','chrome_settings_overrides'] if k in m},ensure_ascii=False,indent=2))"
+
+# 期望：
+#   permissions = storage, favicon, activeTab, contextMenus, alarms, search
+#   host_permissions = https://kongjing.inc.re/*
+#   optional_permissions = scripting
+#   optional_host_permissions = https://*/*, http://*/*
+#   chrome_settings_overrides 不存在（无法改默认搜索引擎/主页）
+
+────────────────────────────────────────────────────────────
+4) 包完整性：按 Chromium treehash 复算商店签名清单
+────────────────────────────────────────────────────────────
+python - <<'PY'
+import json,base64,hashlib
+d=json.load(open('ext/_metadata/verified_contents.json'))
+p=json.loads(base64.urlsafe_b64decode(d[0]['signed_content']['payload']+'==='))
+bs=p['content_hashes'][0]['block_size']
+b=lambda x: base64.urlsafe_b64encode(x).decode().rstrip('=')
+ok=bad=0
+for f in p['content_hashes'][0]['files']:
+    data=open('ext/'+f['path'],'rb').read()
+    hs=[hashlib.sha256(data[i:i+bs]).digest() for i in range(0,len(data),bs)]
+    root=b(hs[0]) if len(hs)==1 else b(hashlib.sha256(b''.join(hs)).digest())
+    ok+= root==f['root_hash']; bad+= root!=f['root_hash']
+print(p['item_id'],p['item_version'],'ok',ok,'bad',bad)
+PY
+# 期望：hiikbcjfgbpnbnkgddndechehhhmgfbg 2.1.1 ok 23 bad 0
+
+────────────────────────────────────────────────────────────
+5) SPEC 1.1 特征扫描
+────────────────────────────────────────────────────────────
+python - > /tmp/kj-scan.txt 2>&1 <<'PY'
+import zipfile,io,re,collections
+raw=open('kongjing-chrome.crx','rb').read(); i=raw.find(b'PK\x03\x04')
+z=zipfile.ZipFile(io.BytesIO(raw[i:]))
+t='\n'.join(z.read(n).decode('utf-8','replace') for n in z.namelist() if n.endswith(('.js','.html','.json','.css')))
+PATS={
+ '电商域': r'(jd\.com|taobao\.com|tmall\.com|1688\.com|pinduoduo|suning|vip\.com)',
+ '仿冒域': r'\b[a-z0-9\-]+\.(?:coml|cm|con|orn|om)\.(?:cc|cn|com|net)\b',
+ '推广码参数': r'\b(?:tn|pid|unionid|union_id|aff|affid|cps|ref|spm|scm|ali_refid|ali_trackid)=',
+ '点击/跳转路径': r'(/clk|/click|/track|/redirect|/jump|/goto|/union|/cps|/tg\?)',
+ '指纹采集': r'(fingerprint|canvas\.toDataURL|webgl|deviceId|fp_?id)',
+ '动态执行': r'(eval\s*\(|new\s+Function\s*\(|atob\s*\()',
+ '远程脚本注入': r'(createElement\([\'"]script|insertAdjacentHTML)',
+ 'href 改写': r'\.href\s*=\s*',
+ '历史记录读取': r'(chrome\.history|browsingHistory|\bhistory\.search\b)',
+ 'cookie 读取': r'(chrome\.cookies|document\.cookie)',
+}
+for k,p in PATS.items():
+    m=re.findall(p,t); print(k, len(m), sorted(set(m))[:8])
+print('--- domains ---')
+for d,n in collections.Counter(re.findall(r'https?://[a-zA-Z0-9\.\-]+\.[a-z]{2,}',t)).most_common(50):
+    print(n,d)
+PY
+cat /tmp/kj-scan.txt
+# 期望：电商域 0 / 仿冒域 0 / 点击路径 0 / 历史 0 / cookie 0
+#       推广码 14 全是 ref=/const tn= 误报
+#       指纹 158 全是同步协议 deviceId
+
+────────────────────────────────────────────────────────────
+6) 复核命中项上下文（确认误报）
+────────────────────────────────────────────────────────────
+# 6.1 推广码命中全是 React ref 与局部变量
+grep -oE '.\{25\}(tn|ref)=' ext/background.js ext/assets/*.js | head -20
+
+# 6.2 无电商/仿冒域
+grep -rEo 'jd\.com|taobao\.com|tmall\.com|1688\.com|coml\.cc' ext/ || echo 'NONE'
+
+# 6.3 无远程脚本注入 / 动态执行
+grep -rEo "createElement\(['\"]script|eval\(|new Function\(" ext/ || echo 'NONE'
+
+# 6.4 默认书签只有 6 个常规站点
+grep -o 'bookmarks:\[\["github"[^]]*\]' ext/background.js
+
+# 6.5 默认搜索调用系统引擎，不改默认搜索引擎
+grep -o '.\{80\}chrome\.search\.query.\{120\}' ext/assets/index-*.js
+
+────────────────────────────────────────────────────────────
+7) 网络侧核验（无需登录、不携带任何用户数据）
+────────────────────────────────────────────────────────────
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://kongjing.inc.re/
+# 200 （无 302 跳转）
+
+curl -s https://kongjing.inc.re/v1/health
+# {"ok":true,"service":"kongjing-relay","version":"2.0.0",...}
+
+# 图标代取接口：只接受域名，返回图标字节（不重定向到第三方）
+curl -s -D - -o /tmp/kj-icon.bin "https://kongjing.inc.re/v1/icon?host=github.com" | head -5
+# HTTP/2 200, content-type: image/x-icon
+file /tmp/kj-icon.bin
+# MS Windows icon resource
+
+# 官方隐私政策（第 2 节明确披露图标域名查询）
+curl -s https://kongjing.inc.re/privacy | grep -o '缺失时将书签网站的域名.\{0,80\}'
+
+────────────────────────────────────────────────────────────
+8) 可选权限的行为边界
+────────────────────────────────────────────────────────────
+# 空境栏默认关闭
+grep -o 'barEnabled:!\?[01]' ext/background.js        # barEnabled:!1（默认 false）
+
+# 仅在已授权且开启时注册；收起时反注册
+grep -o 'registerContentScripts(\[\{id:"kongjing-bar"[^]]*\]' ext/background.js
+
+# 内容脚本只渲染自己的 UI，不改页面链接
+head -c 300 ext/bar.js
+grep -c 'location.href=e.url' ext/bar.js    # 1（用户点击书签时的直接跳转）

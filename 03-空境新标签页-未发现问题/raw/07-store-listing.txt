@@ -1,0 +1,28 @@
+Chrome 应用商店条目快照 · 空境 · 新标签页
+抓取时间：2026-10-26　抓取地址：https://chromewebstore.google.com/detail/hiikbcjfgbpnbnkgddndechehhhmgfbg
+
+名称        : 空境 · 新标签页
+扩展 ID     : hiikbcjfgbpnbnkgddndechehhhmgfbg
+版本        : 2.1.1
+上次更新    : 2026年10月25日
+大小        : 272 KiB（安装包 278,724 字节）
+分类        : 工具
+语言        : 中文（中国）
+用户数      : 2（抓取时）
+评分        : 无评分（0 星）
+提供方      : vrhjio4405
+开发者      : mumuhaha
+简介        : 空境——安静的新标签页：时钟、搜索、书签，以及端到端加密的多设备同步。
+
+隐私权（商店披露）
+  处理的数据类别：网站内容
+  开发者声明：
+    不会出售给第三方（未经批准的用途）
+    不会用于与核心功能无关的目的
+    不会用于确定信用度或放贷
+
+隐私政策：https://kongjing.inc.re/privacy
+
+Edge 商店
+  本次未取得可确认的 Edge 商店条目（Edge 检索页为动态渲染，未返回可核对的 crxId）。
+  本报告结论仅针对上述 Chrome 商店包与哈希。

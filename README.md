@@ -12,7 +12,7 @@
 
 ## 一、这是什么
 
-一个**浏览器扩展审查证据包**：包含两个真实案例的完整证据（官方原始安装包、代码片段、抓包、截图、哈希），以及一套面向 AI 代理与人类审查员的 **S0–S6 标准审查流程**。
+一个**浏览器扩展审查证据包**：包含三个真实案例的完整证据（官方原始安装包、代码片段、抓包、截图、哈希），以及一套面向 AI 代理与人类审查员的 **S0–S6 标准审查流程**。
 
 产出物是文档与证据，**不是可执行程序**。目录内全部使用相对路径，可整体移动到任意位置。
 
@@ -24,6 +24,7 @@
 |---|---|---|---|
 | **iTab 新标签页** | Chrome 2.3.13<br>`247d7106…`<br>Edge 2.2.25<br>`a8b1a8f9…` | **D — 确认返利劫持 + 推广注入** | 默认导航的电商图标指向自有跳转域 `*.coml.cc`，实测 302 至 `extdd1.browser.360.cn/browser/clk`；服务端下发推广码并强制改写搜索引擎链接；采集浏览器指纹与城市 |
 | **青柠起始页** | Chrome 1.4.0<br>`2936aeef…`<br>Edge 1.4.0<br>`7990e470…` | **A — 未发现问题** | 无电商域、无仿冒域、无推广码、无跟踪跳转；权限仅 4 项且用途收窄（清缓存限定自家域名）；两版代码逐字节相同；未申请 `history`，无浏览记录读取 |
+| **空境 · 新标签页** | Chrome 2.1.1<br>`4990456f…` | **A — 未发现问题** | 新标签页完全本地（无 iframe / 无远程脚本）；默认书签仅 6 个常规站点；搜索走 `chrome.search.query` 且不改默认引擎；同步为 AES-256-GCM 端到端加密；全站权限为可选、默认关闭，仅用于"空境栏"；图标缺失时向中继发送明文域名，隐私政策已披露 |
 
 > 判定分级：**A** 未发现问题 ／ **B** 存在风险点 ／ **C** 确认推广注入 ／ **D** 确认返利劫持（定义见 [`AGENTS.md`](AGENTS.md) 第 4 节）。
 >
@@ -49,11 +50,17 @@ extension-audit/
 │   ├── raw/                       原始文本证据
 │   └── shots/                     代码 / 抓包截图
 │
-└── 02-青柠起始页-未发现问题/     案例二（A 级，Chrome + Edge）
+├── 02-青柠起始页-未发现问题/     案例二（A 级，Chrome + Edge）
+│   ├── REPORT.md                  统一审查报告
+│   ├── lime.crx / lime-edge.crx / lime-site.html
+│   ├── ext/                       解包源码（两版逐字节相同）
+│   └── raw/                       哈希 / manifest / 扫描 / 比对 / 权限
+│
+└── 03-空境新标签页-未发现问题/   案例三（A 级，Chrome）
     ├── REPORT.md                  统一审查报告
-    ├── lime.crx / lime-edge.crx / lime-site.html
-    ├── ext/                       解包源码（两版逐字节相同）
-    └── raw/                       哈希 / manifest / 扫描 / 比对 / 权限
+    ├── kongjing-chrome.crx        官方原始包（只读）
+    ├── ext/                       解包源码（本地新标签页）
+    └── raw/                       哈希 / 权限 / 域名 / 命中复核 / 自证 / 完整性 / 商店快照
 ```
 
 > 内部资料目录（`_内部资料（勿上传）/`）**已通过 `.gitignore` 排除**，不包含在本公开库中。
@@ -68,6 +75,7 @@ extension-audit/
 | 查阅特征库 / 权限矩阵 / 误报 / 基准案例 | [`docs/SPEC.md`](docs/SPEC.md) |
 | 看 iTab 案例的完整证据 | [`01-iTab-确认推广注入/`](01-iTab-确认推广注入/) |
 | 看青柠起始页的审查报告 | [`02-青柠起始页-未发现问题/REPORT.md`](02-青柠起始页-未发现问题/REPORT.md) |
+| 看空境新标签页的审查报告 | [`03-空境新标签页-未发现问题/REPORT.md`](03-空境新标签页-未发现问题/REPORT.md) |
 | 全包导航 | [`00-总索引.md`](00-总索引.md) |
 
 ---
@@ -102,6 +110,16 @@ curl -L -o lime.crx "https://clients2.google.com/service/update2/crx?response=re
 md5sum lime.crx          # 应为 2936aeef53a1c9bb079bfda3cf7e93d3
 python -c "import zipfile,io;raw=open('lime.crx','rb').read();i=raw.find(b'PK\x03\x04');zipfile.ZipFile(io.BytesIO(raw[i:])).extractall('lime')"
 grep -rEo 'jd\.com|taobao\.com|coml\.cc|tn=[A-Za-z0-9_]+' lime/   # 应为空
+```
+
+### 空境 · 新标签页（Chrome 2.1.1）
+
+```bash
+curl -L -o kongjing.crx "https://clients2.google.com/service/update2/crx?response=redirect&prodversion=120.0&acceptformat=crx2,crx3&x=id%3Dhiikbcjfgbpnbnkgddndechehhhmgfbg%26uc"
+md5sum kongjing.crx      # 应为 4990456f8fadf816ab9b6a9cd336b3cc
+python -c "import zipfile,io;raw=open('kongjing.crx','rb').read();i=raw.find(b'PK\x03\x04');zipfile.ZipFile(io.BytesIO(raw[i:])).extractall('kj')"
+grep -rEo 'jd\.com|taobao\.com|coml\.cc|chrome\.history|chrome\.cookies' kj/   # 应为空
+grep -o '.\{60\}chrome\.search\.query.\{80\}' kj/assets/index-*.js
 ```
 
 ---

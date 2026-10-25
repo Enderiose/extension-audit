@@ -1,0 +1,23 @@
+# 网络侧核验 · 空境 v2.1.1（2026-10-26）
+
+## 1) 同步中继根路径
+GET https://kongjing.inc.re/  -> HTTP 200, redirect=, remote_ip=172.67.155.59
+
+## 2) 健康检查
+{"ok":true,"service":"kongjing-relay","version":"2.0.0","time":1792944365340}
+
+## 3) 响应头（节选）
+HTTP/2 200 
+content-type: text/html
+server: cloudflare
+
+## 4) 扩展包与商店中出现的域名（完整列表见 03-network-domains.txt）
+
+## 5) 图标代取接口（模拟扩展的图标缺失回退请求）
+HTTP/1.1 200 OK
+Content-Type: image/x-icon
+Content-Length: 6518
+body: 6518 bytes, file type: MS Windows icon resource
+
+## 6) 官方隐私政策节选（第 2 节）
+网站图标：优先使用本机图标缓存；缺失时将书签网站的域名（例如 github.com，不含页面路径）发给所选图标服务，以获取公开图标。域名查询本身不受书签端到端加密保护，服务也会接触必要的网络元数据。 网页搜索与打开网站：提交网页搜索时，搜索词交给浏览器默认或你选择的搜索引擎；打开书签时连接对应网站。这些网站依其隐私政策处理请求。保存在本机的搜索记录不代表搜索引擎无法收到你提交的搜索词。 3. 权限与程序代码 空境栏默认关闭。仅在你主动开启时，申请可选 scripting 与 HTTP(S) 网站权限，用随包代码在普

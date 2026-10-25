@@ -64,6 +64,7 @@ PY
 - 内容脚本注入**第三方站点**（`matches` 含 `*://*/*` 或 `<all_urls>`）
 - 混淆：`_0x[0-9a-f]{4,}` 大量出现、base64 大字符串 + `atob`
 - `externally_connectable` 允许外部站点驱动扩展逻辑
+- 宣称"端到端加密"但存在**明文辅助请求**（如按书签域名请求图标、天气、汇率等第三方服务）——加密只覆盖它声明的那条链路，需逐个接口核对
 
 ---
 
@@ -106,6 +107,7 @@ PY
 |---|---|---|---|---|
 **iTab 新标签页** | Chrome `mhloojimgilafopcmlcikiidgbbnelip`<br>Edge `inedkoakiaeepjoblbiiipedngonadhn` | Chrome 2.3.13 / MD5 `247d71066852e38d74a64d9bee31033e`<br>Edge 2.2.25 / MD5 `a8b1a8f9e7dec0ed89dc68785ba24462` | 默认导航 `taobao/jd/tmall/1688 → *.coml.cc`，实测 302 至 `extdd1.browser.360.cn/browser/clk`；代码中 `o = s.tn \|\| "52176495_dg&ch=2"` 后 `e.href = ...tn=${o}` 强制改写；上报 `fp`+`city`；权限含 `scripting` + 可选 `<all_urls>`；包内 3 个不同推广码 | **D** |
 **青柠起始页** | Chrome `aajmeahnoefldipnjgodkobfdcpmapno`<br>Edge `pcpnigdkpcgemocnjhebmajldpjlbeom` | Chrome 1.4.0 / MD5 `2936aeef53a1c9bb079bfda3cf7e93d3`<br>Edge 1.4.0 / MD5 `7990e470de73852d188b09f84ba826c7` | 无任何电商域/仿冒域/推广码/跟踪路径；权限仅 `activeTab, browsingData, commands, storage`；内容脚本仅注入自家域名；`browsingData` 收窄为自家域名；未申请 `history`；新标签页为自家站点 iframe；全部外链均为用户主动点击；两版代码逐字节相同 | **A** |
+**空境 · 新标签页** | Chrome `hiikbcjfgbpnbnkgddndechehhhmgfbg` | Chrome 2.1.1 / MD5 `4990456f8fadf816ab9b6a9cd336b3cc` | 本地新标签页（无 iframe/远程脚本）、CSP `'self'`；默认书签 6 个常规站点；搜索走 `chrome.search.query` 且未声明 `chrome_settings_overrides`；同步为 HKDF+AES-256-GCM 密文信封；全站 host+`scripting` 为可选权限、默认关闭，仅注册 `bar.js` 渲染空境栏；图标缺失时 `GET <relay>/v1/icon?host=` 明文发送域名（隐私政策已披露）；`verified_contents` 23/23 一致 | **A** |
 
 ---
 
@@ -147,6 +149,11 @@ extension-audit/
 │   ├── lime.crx / lime-edge.crx / lime-site.html
 │   ├── ext/                          解包源码（两版逐字节相同，共用一份）
 │   └── raw/  哈希 / manifest / 扫描 / 比对 / 权限
+├── 03-空境新标签页-未发现问题/        ← 案例三（A 级，Chrome）
+│   ├── REPORT.md                     统一审查报告
+│   ├── kongjing-chrome.crx           官方原始包 v2.1.1（只读）
+│   ├── ext/                          解包源码（本地新标签页）
+│   └── raw/  哈希 / manifest / 权限 / 域名 / 命中复核 / 自证 / 完整性 / 商店快照
 └── _内部资料（勿上传）/              ★ 对外分享时整个目录排除
     ├── 私用-素材与文案（勿公开）.md
     ├── Edge 策略加固记录.md
@@ -161,8 +168,11 @@ iTab（Chrome `mhloojimgilafopcmlcikiidgbbnelip`） | 2.3.13 / MD5 `247d71066852
 iTab（Edge `inedkoakiaeepjoblbiiipedngonadhn`） | 2.2.25 / MD5 `a8b1a8f9e7dec0ed89dc68785ba24462` | **D** |
 青柠起始页（Chrome `aajmeahnoefldipnjgodkobfdcpmapno`） | 1.4.0 / MD5 `2936aeef53a1c9bb079bfda3cf7e93d3` | **A** |
 青柠起始页（Edge `pcpnigdkpcgemocnjhebmajldpjlbeom`） | 1.4.0 / MD5 `7990e470de73852d188b09f84ba826c7` | **A** |
+空境 · 新标签页（Chrome `hiikbcjfgbpnbnkgddndechehhhmgfbg`） | 2.1.1 / MD5 `4990456f8fadf816ab9b6a9cd336b3cc` | **A** |
 
 iTab 核心事实：默认导航电商图标指向 `*.coml.cc` → 302 至 `extdd1.browser.360.cn/browser/clk`；`statistics-*.js` 采集 `fp`+`city`，服务端下发 `tn` 推广码并 `e.href=` 强制改写搜索链接（兜底 `52176495_dg&ch=2`）；包内 3 个推广码。
+
+空境核心事实：新标签页 `index.html` 完全本地；默认书签仅 GitHub/B站/知乎/YouTube/Gmail/少数派；默认搜索 `chrome.search.query`；同步数据包为 `{v:1,iv,ct}` AES-GCM 信封；图标优先本地 `_favicon`，缺失时 `GET https://kongjing.inc.re/v1/icon?host=<domain>`（明文仅域名，官方隐私政策第 2 节披露）；可选全站权限仅用于空境栏 `bar.js`；包完整性 23/23。
 
 ### 6.4 对外发布注意
 
@@ -179,3 +189,4 @@ iTab 核心事实：默认导航电商图标指向 `*.coml.cc` → 302 至 `extd
 |---|---|
 2026-09-26 | 首版。基准案例：iTab（D）、青柠起始页（A） |
 2026-09-26 | 增补青柠起始页 Edge 版（A）；拆分出本参考规范 `docs/SPEC.md` |
+2026-10-26 | 新增空境 · 新标签页（Chrome 2.1.1，A）；补充"端到端加密不等于所有外发均加密（图标代取为明文域名）"的核对要点 |

@@ -1,0 +1,89 @@
+权限与用途对照 · 空境 · 新标签页 v2.1.1（Chrome）
+
+manifest 声明
+  permissions               : storage, favicon, activeTab, contextMenus, alarms, search
+  host_permissions          : https://kongjing.inc.re/*（仅同步中继）
+  optional_permissions      : scripting
+  optional_host_permissions : https://*/* , http://*/*
+  chrome_url_overrides      : newtab = index.html（本地页面，无 iframe、无远程脚本）
+  chrome_settings_overrides : 未声明（不能改默认搜索引擎 / 主页 / 启动页）
+  content_scripts           : 未声明（空境栏由 chrome.scripting 在用户授权后动态注册）
+  externally_connectable    : 未声明（外部网页无法驱动扩展）
+  CSP extension_pages       : script-src 'self'; object-src 'self'; base-uri 'self'
+
+未申请（结构性排除相关能力）
+  history / bookmarks / webRequest / declarativeNetRequest / tabs / cookies / proxy /
+  unlimitedStorage / downloads / nativeMessaging / management
+
+权限逐项用途与代码证据
+  storage         9 处 chrome.storage.local（无 chrome.storage.sync，数据不落 Google 账户）
+                  用途：书签/设置/配对密钥的本地持久化
+  favicon         本地内置页面 _favicon：
+                  chrome.runtime.getURL(`_favicon/?pageUrl=...&size=64`)（background.js）
+                  用途：读取本地缓存图标，不发网络请求
+                  补充：本地无缓存时，回退到 GET <relay>/v1/icon?host=<域名>
+                        （只发 hostname，明文，无认证头；隐私政策第 2 节已披露）
+  activeTab       上下文菜单点击时读取当前页 URL
+                  chrome.contextMenus.onClicked → Pe(o.linkUrl || t?.url, ...)
+                  用途："收藏此页 / 收藏此链接"
+  contextMenus    onInstalled 时创建 2 个菜单项（页面 / 链接），removeAll 后重建
+  alarms          chrome.alarms.create("kj-wake", {periodInMinutes:1})
+                  用途：1 分钟心跳，驱动同步重试（未配对时无网络请求）
+  search          1 处 chrome.search.query({text, disposition})
+                  用途：默认搜索引擎下执行搜索；不修改浏览器默认搜索引擎
+                  （chrome_settings_overrides 未声明，结构上也无法修改）
+
+可选权限（默认不生效，需用户在界面确认后调用 chrome.permissions.request）
+  scripting + https://*/* + http://*/*
+  唯一用途：空境栏（悬浮收藏栏），background.js 动态注册：
+    chrome.scripting.registerContentScripts([{
+      id:"kongjing-bar", js:["bar.js"],
+      matches:["http://*/*","https://*/*"],
+      excludeMatches:["https://chromewebstore.google.com/*",
+                      "https://chrome.google.com/webstore/*",
+                      "https://microsoftedge.microsoft.com/addons/*"],
+      runAt:"document_idle", allFrames:false }])
+  开关：settings.barEnabled 默认 false（background.js 默认配置）
+  注销：barEnabled=false 或权限被收回时 unregisterContentScripts
+
+  界面原文（assets/index-*.js）：
+    "空境栏会出现在你访问的网页顶部，需要「读取和更改所有网站上的数据」权限才能显示。
+     空境栏不会读取网页内容，只有在你点击「收藏本页」时才读取网址和标题。"
+    "空境会直接访问你收藏的网站首页，只为读取它的图标。不会读取网页里的其他内容，
+     也不会上传任何数据。"
+
+  bar.js 行为核对（全文 12 KB 已逐行阅读）
+    - 仅创建 <kongjing-bar> + closed shadow DOM，渲染自己的收藏栏
+    - 不读取页面 DOM 文本、不修改页面内链接、不监听表单/输入
+    - 页面加载时用 sender.tab.url 与本地书签比对（显示"已收藏"状态，本地完成）
+    - 用户点击「收藏本页」时才读取 location.href 与 document.title
+    - 点击收藏项：location.href = e.url（直接跳转，无中转域、无参数追加）
+    - 在扩展商店域名上直接 return，不注入
+
+"清除浏览数据"字样说明（非权限项）
+  assets/index-*.js 的对话框文案 "清除浏览数据？Cookie、缓存、历史" 对应
+  window.KongjingNative?.("clearBrowsingData", ...) —— 仅原生外壳（App）桥接：
+    function Pr(n,...e){const a=window.KongjingNative; if(typeof a?.[n]=="function") ...}
+  浏览器环境中 window.KongjingNative 不存在 → 空操作；
+  manifest 未申请 browsingData，代码也无 chrome.browsingData 调用（0 处）。
+
+全部 chrome.* API 调用（按文件）
+  background.js        : storage.local(9) runtime.sendMessage(4) storage.onChanged(3)
+                         runtime.onMessage(3) runtime.getURL(3) tabs.query(2) tabs.create(2)
+                         permissions.contains(2) contextMenus.create(2) action.setBadgeText(2)
+                         tabs.sendMessage(1) scripting.*(4) runtime.onInstalled(1)
+                         permissions.onRemoved/onAdded(2) contextMenus.removeAll/onClicked(2)
+                         commands.onCommand(1) alarms.onAlarm/create(2) action.setBadgeBackgroundColor(1)
+  bar.js               : storage.local(1) storage.onChanged(1) runtime.sendMessage(1) runtime.onMessage(1)
+  assets/index-*.js    : search.query(1) permissions.request(1)
+  assets/popup-*.js    : tabs.create(2) tabs.update(1) tabs.query(1) storage.local(1) runtime.getURL(1)
+  assets/v2-*.js       : runtime.sendMessage(5) storage.local(3) runtime.onMessage(3)
+                         storage.onChanged(2) runtime.getURL(2)
+
+结论
+  必需权限最小化（6 项，均为新标签页/书签类功能所必需）；
+  唯一宽口径（全站 host + scripting）为可选权限，默认关闭，需用户明确授权，
+  且实际用途仅为"在普通网页中显示空境栏"一件事；未授权时不注册脚本。
+
+图标获取不依赖可选权限：优先本地 _favicon 缓存，缺失时经中继 /v1/icon?host= 代取
+（明文仅域名，已写入官方隐私政策）。

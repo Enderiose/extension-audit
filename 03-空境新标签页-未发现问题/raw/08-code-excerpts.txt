@@ -1,0 +1,53 @@
+空境 · 新标签页 v2.1.1 · 关键代码摘录（最小必要引用）
+文件路径均相对于本案例目录；截取点以特征串定位，可用 05-verify-cmds.txt 复现。
+
+──────────────────────────────────────────────────────────────────────
+[1] 默认书签（background.js · 默认数据）
+──────────────────────────────────────────────────────────────────────
+bookmarks:[["github","GitHub","https://github.com"],["bilibili","哔哩哔哩","https://www.bilibili.com"],["zhihu","知乎","https://www.zhihu.com"],["youtube","YouTube","https://www.youtube.com"],["gmail","Gmail","https://mail.google.com"],["sspai","少数派","https://sspai.com"]].map(([o,t,e],s)=>({id:`default-${o}`,title:t,url:e,order:s,groupId:"default-common",icon:{mode:"auto"},createdAt:0,updatedAt:0})),tombstones:[],searchEngines:[]}}function Nt(o){const t={...o,smoothFirst:
+
+──────────────────────────────────────────────────────────────────────
+[2] 同步数据加密信封（background.js · AES-GCM）
+──────────────────────────────────────────────────────────────────────
+Envelope version");return me(await tt(o,b(e.iv),b(e.ct),A(t)))}function rt(o){return xt(new Uint8Array([1]),b(o.iv),b(o.ct))}function W(o){if(o.length<29||o[0]!==1)throw new u("BAD_REQUEST","Envelope version");return{v:1,iv:E(o.slice(1,13)),ct:E(o.slice(13))}}const yt=(o,t,e,s,r)=>it(o,"kj/j/"+t+"/"+e,A(JSON.stringify(s)),r),nt=async(o,t,e,s)=>JSON.parse(P(await H(o,"kj/j/"+t+"/"+e,s))),vt=async(o,t,e,s,r)=>rt(await it(o,"kj/s/"+t+"/"+e,A(JSON.stringify(s)),r)),bt=async(o,t,e,s)=>JSON.parse(P(await H(o,"kj/s/"+t+"/"+e,s))),Yt=async(o,t,e,s,r)=>rt(await it(o,"kj/b/"+t+"/"+e,s,r)),Ge=(o,t,e,s)=>H(o,"kj/b/"+t+"/"+e,W(s));class Rt{data=
+
+──────────────────────────────────────────────────────────────────────
+[3] seal 函数：先加密再上传（background.js）
+──────────────────────────────────────────────────────────────────────
+async function it(o,t,e,s){const r=await Z(o,await ge(e),A(t),s);return{v:1,iv:E(r.iv),ct:E(r.ct)}}async function H(o,t,e){if(e?.v!==1)throw new u("BAD_REQUEST","Envelope version");return me(await tt(o,b(e.iv),b(e.ct),A(t)))}funct
+
+──────────────────────────────────────────────────────────────────────
+[4] 空境栏动态注册（background.js · 需已授权）
+──────────────────────────────────────────────────────────────────────
+ome.permissions.contains({origins:["http://*/*","https://*/*"]}))){o.some(s=>s.id==="kongjing-bar")&&await chrome.scripting.unregisterContentScripts({ids:["kongjing-bar"]});return}o.some(s=>s.id==="kongjing-bar")||await chrome.scripting.registerContentScripts([{id:"kongjing-bar",js:["bar.js"],matches:["http://*/*","https://*/*"],excludeMatches:["https://chromewebstore.google.com/*","https://chrome.google.com/webstore/*","https://microsoftedge.microsoft.com/addons/*"],runAt:"document_idle",allFrames:!1}]);const e=await chrome.tabs.query({});await Promise.all(e.filter(s=>s.id&&Ht(s.url||"")).map(s=>chrome.scripting.executeScript({target:{tabId:
+
+──────────────────────────────────────────────────────────────────────
+[5] 默认搜索（assets/index-*.js · 调用系统默认引擎）
+──────────────────────────────────────────────────────────────────────
+s=/[\p{Script=Latin}0-9]$/u.test(a)?" ":"";return`在${r}${a}${s}中搜索`}function Se(n,e=!1){e?window.open(n,"_blank","noopener,noreferrer"):window.location.assign(n)}async function Kr(n,e,a){const r=n.trim();if(r){if(e.id!=="default")return Se(e.url.replace("%s",encodeURIComponent(r)),a);if(Zt()){await chrome.search.query({text:r,disposition:a?"NEW_TAB":"CURRENT_TAB"});return}console.debug("[空境] 非扩展预览：默认搜索回退到必应。"),Se("https://www.bing.com/search?q="+encodeURIComponent(r),a)}}let Wr={engine:"bing",bookmarkNewTab:!1};const Pt=new Set,Rt={ge
+
+──────────────────────────────────────────────────────────────────────
+[6] 搜索引擎预设（assets/v2-*.js · 无推广参数）
+──────────────────────────────────────────────────────────────────────
+:"default-common",icon:{mode:"auto"},createdAt:0,updatedAt:0})),tombstones:[],searchEngines:[]}}const bk=[{id:"default",name:"默认搜索",url:"",updatedAt:0},{id:"google",name:"Google",url:"https://www.google.com/search?q=%s",updatedAt:0},{id:"bing",name:"必应",url:"https://www.bing.com/search?q=%s",updatedAt:0},{id:"baidu",name:"百度",url:"https://www.baidu.com/s?wd=%s",updatedAt:0},{id:"duckduckgo",name:"DuckDuckGo",url:"https://duckduckgo.com/?q=%s",upd
+
+──────────────────────────────────────────────────────────────────────
+[7] 可选权限申请（assets/index-*.js · 用户确认后）
+──────────────────────────────────────────────────────────────────────
+ren:[t.jsx("h1",{children:s}),t.jsx("p",{className:"muted",style:{marginTop:16},children:c}),t.jsxs("div",{className:"dialog-actions",children:[t.jsx(F,{variant:"secondary",onClick:()=>n.open(null),children:a?"暂不":"取消"}),t.jsx(F,{variant:a?"primary":"danger",onClick:()=>void(async()=>{a?(Zt()?await chrome.permissions.request({origins:["http://*/*","https://*/*"],...r?{permissions:["scripting"]}:{}}):!1)?(r&&n.setting("barEnabled",!0),n.toast(r?"空境栏已开启":"已允许读取网站图标")):n.toast("未获得权限"):e.type==="clear-browser"?Pr("clearBrowsingData",JSON.stringify(["cookies
+
+──────────────────────────────────────────────────────────────────────
+[8] 权限用途说明文案（assets/index-*.js）
+──────────────────────────────────────────────────────────────────────
+eave"?"离开配对组？":"移除「"+e.name+"」？",c=e.type==="clear-browser"?"Cookie、缓存、历史":a?r?"空境栏会出现在你访问的网页顶部，需要「读取和更改所有网站上的数据」权限才能显示。空境栏不会读取网页内容，只有在你点击「收藏本页」时才读取网址和标题。":"空境会直接访问你收藏的网站首页，只为读取它的图标。不会读取网页里的其他内容，也不会上传任何数据。":e.type==="replace"?"替换后，本机现有的书签和设置将被覆盖。":e.type==="remove-device"?"这台设备将无法再接收同步数据。其余设备会自动更换加密密钥。":e.type==="leave"?"本机数据会保留在这台设备上。":"书签和设置将恢复为默认值。";return t.jsxs(t.Fragment,{children:[t.jsx("h1",{children:s}),t.js
+
+──────────────────────────────────────────────────────────────────────
+[9] 图标读取走本地 _favicon（background.js）
+──────────────────────────────────────────────────────────────────────
+typeof t=="object"&&t&&"code"in t?String(t.code):"NETWORK"},this.emit()}async notify(){this.client.notifyLocalChange()}}const Ct=o=>pt()?chrome.runtime.getURL(`_favicon/?pageUrl=${encodeURIComponent(o)}&size=64`):"",Dt=new Map;function ce(o){return typeof Image>"u"?(async()=>{try{const t=await createImageBitmap(await(await fetch(o)).blob()),e=new OffscreenCa
+
+──────────────────────────────────────────────────────────────────────
+[10] bar.js 注入前的自检（不注入扩展商店页面）
+──────────────────────────────────────────────────────────────────────
+(()=>{if(document.querySelector("kongjing-bar")||!/^https?:$/.test(location.protocol)||/(^|\.)(chromewebstore\.google\.com|chrome\.google\.com|microsoftedge\.microsoft\.com)$/.test(location.hostname))return;let A,v,P=0;const f=document.createElement("kongjing-
+
