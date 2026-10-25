@@ -44,8 +44,6 @@ extension-audit/
 │
 ├── 01-iTab-确认推广注入/        案例一（D 级）
 │   ├── iTab-曝光说明-公开版.md     对外发布主文档
-│   ├── 举报材料-12315.md          向市场监管部门举报
-│   ├── 举报材料-扩展商店.md       向 Chrome / Edge 商店举报（中英双语）
 │   ├── itab-chrome.crx / itab-edge.crx   官方原始包（只读）
 │   ├── raw/                       原始文本证据
 │   └── shots/                     代码 / 抓包截图

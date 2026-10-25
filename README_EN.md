@@ -45,8 +45,6 @@ extension-audit/
 │
 ├── 01-iTab-确认推广注入/        Case 1 (grade D)
 │   ├── iTab-曝光说明-公开版.md    Public disclosure document
-│   ├── 举报材料-12315.md         Complaint to the market regulator
-│   ├── 举报材料-扩展商店.md      Complaint to Chrome / Edge stores (bilingual)
 │   ├── itab-chrome.crx / itab-edge.crx   Official original packages (read-only)
 │   ├── raw/                     Raw text evidence
 │   └── shots/                   Code / capture screenshots
